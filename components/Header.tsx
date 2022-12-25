@@ -2,8 +2,12 @@ import React from "react";
 import Link from "next/link";
 import Router from "next/router";
 import Cookies from "js-cookie";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { selectActiveTab, setActiveTab } from "../slices/main/mainSlice";
 
 const Header = () => {
+  const dispatch = useAppDispatch();
+  const active = useAppSelector(selectActiveTab);
   const handleLogout = () => {
     Cookies.remove("token");
     Router.push("/login");
@@ -41,21 +45,42 @@ const Header = () => {
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
               <li>
                 <Link href="/defineBus">
-                  <div className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 cursor-pointer select-none">
+                  <div
+                    onClick={() => dispatch(setActiveTab("defineBus"))}
+                    className={`block py-2 pr-4 pl-3 ${
+                      active === "defineBus"
+                        ? "dark:text-white"
+                        : "dark:text-gray-400"
+                    } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0  lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 cursor-pointer select-none`}
+                  >
                     Otobüs Tanımla
                   </div>
                 </Link>
               </li>
               <li>
                 <Link href="/defineVoyage">
-                  <div className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 cursor-pointer select-none">
+                  <div
+                    onClick={() => dispatch(setActiveTab("defineVoyage"))}
+                    className={`block py-2 pr-4 pl-3 ${
+                      active === "defineVoyage"
+                        ? "dark:text-white"
+                        : "dark:text-gray-400"
+                    } text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 cursor-pointer select-none`}
+                  >
                     Sefer Tanımla
                   </div>
                 </Link>
               </li>
               <li>
                 <Link href="/buyTicket">
-                  <div className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 cursor-pointer select-none">
+                  <div
+                    onClick={() => dispatch(setActiveTab("buyTicket"))}
+                    className={`block py-2 pr-4 pl-3 ${
+                      active === "buyTicket"
+                        ? "dark:text-white"
+                        : "dark:text-gray-400"
+                    } text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 cursor-pointer select-none`}
+                  >
                     Bilet Al
                   </div>
                 </Link>

@@ -2,22 +2,18 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../configs/axiosConfig";
 import { RootState } from "../../app/store";
 import Cookies from "js-cookie";
+import { LoginSliceType, LoginUserType } from "../../app/typings";
 
-interface LoggedInUserState {
-  error: string | null;
-  status: string;
-}
-
-const initialState: LoggedInUserState = {
+const initialState: LoginSliceType = {
   status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
   error: null,
 };
 
 export const loginUser: any = createAsyncThunk(
   "login/loginUser",
-  async ({ username, password }: { username: string; password: string }) => {
+  async ({ username, password }: LoginUserType) => {
     return await axios
-      .post("login/", { username: username, password: password })
+      .post("login/", { username, password })
       .then(function (response) {
         return response.data;
       });
