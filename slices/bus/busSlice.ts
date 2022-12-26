@@ -13,7 +13,7 @@ const initialState: BusSliceType = {
   createBusStatus: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
   createBusError: null,
   // ---------- Get Bus Model ----------
-  busModels: null,
+  busModels: [],
   busModelsStatus: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
   busModelsError: null,
 };
@@ -23,6 +23,7 @@ export const busDefinition: any = createAsyncThunk(
   "bus/busDefinition",
   async () => {
     return await axios.get("bus-definition/").then(function (response) {
+      console.log(response.data);
       return response.data;
     });
   }
@@ -47,6 +48,7 @@ export const createBus: any = createAsyncThunk(
         properties,
       })
       .then(function (response) {
+        console.log(response.data);
         return response.data;
       });
   }
@@ -121,7 +123,7 @@ const busSlice = createSlice({
       })
       .addCase(getBusModel.fulfilled, (state, action) => {
         state.busModelsStatus = "succeeded";
-        state.busModels = action.payload;
+        state.busModels = action.payload.Model;
       })
       .addCase(getBusModel.rejected, (state, action) => {
         state.busModelsStatus = "failed";
@@ -129,5 +131,9 @@ const busSlice = createSlice({
       });
   },
 });
+
+export const selectBusDefinition = (state: RootState) =>
+  state.bus.busDefinition;
+export const selectBusModels = (state: RootState) => state.bus.busModels;
 
 export default busSlice.reducer;

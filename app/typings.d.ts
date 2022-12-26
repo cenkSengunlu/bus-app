@@ -14,38 +14,49 @@ export interface LoginUserType {
 
 export interface BusSliceType {
   // ---------- Bus Definition ----------
-  busDefinition: {
-    Brands: [{ id: string; name: string }];
-    Types: [{ id: string; name: string }];
-    Properties: [{ id: string; name: string }];
-  } | null;
+  busDefinition: BusDefinitionType | null;
   busDefinitionStatus: string;
   busDefinitionError: string | null;
   // ---------- Create Bus ----------
   createBusStatus: string;
   createBusError: string | null;
   // ---------- Get Bus Model ----------
-  busModels: {
-    plate_number: string;
-    model_id: string;
-    number_of_seats: number;
-    type: string;
-    properties: [
-      {
-        id: string;
+  busModels:
+    | {
+        plate_number: string;
+        model_id: string;
+        number_of_seats: number;
+        type: string;
+        properties: [
+          {
+            id: string;
+          }
+        ];
       }
-    ];
-  } | null;
+    | any;
   busModelsStatus: string;
   busModelsError: string | null;
 }
 
+export interface BusDefinitionType {
+  Brands: BusFeaturesType[];
+  Types: BusFeaturesType[];
+  Properties: BusFeaturesType[];
+}
+
+export interface BusFeaturesType {
+  id: string;
+  name?: string;
+  plate_number?: string;
+}
+
 export interface CreateBusType {
+  id?: string;
   plate_number: string;
   model_id: string;
   number_of_seats: number;
   type: string;
-  properties: [{ id: string }];
+  properties?: [{ id: string }];
 }
 
 // ---------- VOYAGE ----------
@@ -58,9 +69,15 @@ export interface VoyageSliceType {
   deleteVoyageStatus: string;
   deleteVoyageError: string | null;
   // ---------- Get All Voyage ----------
-  voyages: any | null;
+  voyages: VoyagesType | null;
   voyageStatus: string;
   voyageError: string | null;
+}
+
+export interface VoyagesType {
+  bus: CreateBusType[];
+  province: BusFeaturesType[];
+  voyage: any;
 }
 
 export interface CreateVoyageType {
@@ -77,7 +94,7 @@ interface TicketSliceType {
   buyTicketStatus: string;
   buyTicketError: string | null;
   // ---------- Get Ticket Info ----------
-  ticketInfo: any | null;
+  ticketInfo: {} | null;
   ticketInfoStatus: string;
   ticketInfoError: string | null;
 }
