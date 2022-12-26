@@ -73,8 +73,13 @@ export interface CreateVoyageType {
 
 // ---------- TICKET ----------
 interface TicketSliceType {
+  // ---------- Buy Ticket ----------
   buyTicketStatus: string;
   buyTicketError: string | null;
+  // ---------- Get Ticket Info ----------
+  ticketInfo: any | null;
+  ticketInfoStatus: string;
+  ticketInfoError: string | null;
 }
 
 export interface BuyTicketType {
