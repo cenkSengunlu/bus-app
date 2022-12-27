@@ -3,6 +3,7 @@ import axios from "../../configs/axiosConfig";
 import { RootState } from "../../app/store";
 import Cookies from "js-cookie";
 import { CreateVoyageType, VoyageSliceType } from "../../app/typings";
+import Router from "next/router";
 
 const initialState: VoyageSliceType = {
   // ---------- Create Voyage ----------
@@ -12,7 +13,7 @@ const initialState: VoyageSliceType = {
   deleteVoyageStatus: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
   deleteVoyageError: null,
   // ---------- Get All Voyage ----------
-  voyages: null,
+  voyages: [],
   voyageStatus: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
   voyageError: null,
 };
@@ -24,6 +25,7 @@ export const createVoyage: any = createAsyncThunk(
     return await axios
       .post("voyage/", { fee, from, to, date, bus_id })
       .then(function (response) {
+        console.log(response.data);
         return response.data;
       });
   }
@@ -34,6 +36,8 @@ export const deleteVoyage: any = createAsyncThunk(
   "voyage/deleteVoyage",
   async ({ voyageId }: { voyageId: string }) => {
     return await axios.delete(`voyage/${voyageId}`).then(function (response) {
+      console.log(response.data);
+      console.log(voyageId);
       return { data: response.data, voyageId };
     });
   }
@@ -63,8 +67,10 @@ const voyageSlice = createSlice({
       .addCase(createVoyage.pending, (state) => {
         state.createVoyageStatus = "loading";
       })
-      .addCase(createVoyage.fulfilled, (state) => {
+      .addCase(createVoyage.fulfilled, (state, action) => {
         state.createVoyageStatus = "succeeded";
+        state.voyages.push(action.payload);
+        Router.replace(Router.asPath);
       })
       .addCase(createVoyage.rejected, (state, action) => {
         state.createVoyageStatus = "failed";
@@ -78,11 +84,11 @@ const voyageSlice = createSlice({
         state.deleteVoyageStatus = "succeeded";
         const { voyageId } = action.payload;
         const voyages = state.voyages;
-        if (voyages !== null) {
-          state.voyages = voyages.filter(
-            (voyage: any) => voyage.id !== voyageId
-          );
-        }
+        const filteredVoyages = voyages.filter(
+          (voyage: any) => voyage.id !== voyageId
+        );
+        state.voyages = filteredVoyages;
+        Router.replace(Router.asPath);
       })
       .addCase(deleteVoyage.rejected, (state, action) => {
         state.deleteVoyageStatus = "failed";

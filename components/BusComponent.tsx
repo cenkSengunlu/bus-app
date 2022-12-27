@@ -17,7 +17,6 @@ const BusComponent = ({
   const [selectedSeat, setSelectedSeat] = useState<number>();
 
   const handleSelect = (index: number) => {
-    console.log();
     setSelectedSeat(index);
   };
   return (

@@ -69,7 +69,7 @@ export interface VoyageSliceType {
   deleteVoyageStatus: string;
   deleteVoyageError: string | null;
   // ---------- Get All Voyage ----------
-  voyages: VoyagesType | null;
+  voyages: VoyagesType[];
   voyageStatus: string;
   voyageError: string | null;
 }
@@ -81,6 +81,7 @@ export interface VoyagesType {
 }
 
 export interface CreateVoyageType {
+  id?: string;
   fee: number;
   from: string;
   to: string;
@@ -94,9 +95,15 @@ interface TicketSliceType {
   buyTicketStatus: string;
   buyTicketError: string | null;
   // ---------- Get Ticket Info ----------
-  ticketInfo: {} | null;
+  ticketInfo: TicketInfoType | null;
   ticketInfoStatus: string;
   ticketInfoError: string | null;
+}
+
+export interface TicketInfoType {
+  bus: CreateBusType[];
+  province: BusFeaturesType[];
+  voyage: any;
 }
 
 export interface BuyTicketType {

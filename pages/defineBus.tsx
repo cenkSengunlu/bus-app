@@ -34,7 +34,6 @@ const defineBus = ({
   definitions: BusDefinitionType;
   error: string;
 }) => {
-  console.log(definitions);
   return (
     <DefineBusForm
       brands={definitions.Brands}

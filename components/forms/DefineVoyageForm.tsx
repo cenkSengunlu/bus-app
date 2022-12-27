@@ -7,9 +7,16 @@ import { setActiveTab } from "../../slices/main/mainSlice";
 import AmountInput from "../inputs/AmountInput";
 import StandartTextInput from "../inputs/StandartTextInput";
 import SelectMenu from "../selectMenus/SelectMenu";
-import { CreateBusType, BusFeaturesType } from "../../app/typings";
+import {
+  CreateBusType,
+  BusFeaturesType,
+  CreateVoyageType,
+} from "../../app/typings";
 import { busDefinition, selectBusDefinition } from "../../slices/bus/busSlice";
 import AutocompleteMenu from "../selectMenus/AutocompleteMenu";
+import SubmitButton from "../SubmitButton";
+import { createVoyage } from "../../slices/voyage/voyageSlice";
+import VoyageList from "../VoyageList";
 
 const DefineVoyageForm = ({
   buses,
@@ -18,7 +25,7 @@ const DefineVoyageForm = ({
 }: {
   buses: CreateBusType[];
   province: BusFeaturesType[];
-  voyage: any;
+  voyage: CreateVoyageType[];
 }) => {
   const dispatch = useAppDispatch();
   const [bus, setBus] = useState("");
@@ -33,8 +40,25 @@ const DefineVoyageForm = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({ bus, dateTime, where, to, amount });
+    dispatch(
+      createVoyage({
+        fee: Number(amount),
+        from: where,
+        to: to,
+        date: dateTime?.toDate(),
+        bus_id: bus,
+      })
+    );
   };
+
+  const canSave = [
+    bus.trim(),
+    dateTime !== null,
+    where.trim(),
+    to.trim(),
+    Number(amount) !== 0,
+  ].every(Boolean);
+
   return (
     <div className="w-screen h-screen flex items-center justify-center">
       <div className="min-h-[70vh] w-[60%] mx-auto rounded-lg shadow-xl border-2 grid grid-cols-6">
@@ -85,17 +109,18 @@ const DefineVoyageForm = ({
               />
             </div>
             <div className="flex justify-end">
-              <button
-                type="submit"
-                className="mt-5 border-2 text-lg border-black py-2 px-4 cursor-pointer transition ease-in-out hover:bg-black hover:text-white duration-500"
-              >
-                Kaydet
-              </button>
+              <SubmitButton canSave={canSave} />
             </div>
           </Box>
         </div>
-        <div className="w-full h-full flex items-center justify-center rounded-r-lg col-span-3">
-          Sefer Listesi
+        <div className="w-full h-full flex flex-col items-center justify-start rounded-r-lg col-span-3 py-11">
+          <div className="text-4xl font-semibold mb-10">Sefer Listesi</div>
+          {voyage === null && <div>Tanımlı Sefer Yok!</div>}
+          {voyage !== null && (
+            <div className="h-80 w-full px-5 space-y-2 overflow-auto">
+              <VoyageList voyage={voyage} province={province} />
+            </div>
+          )}
         </div>
       </div>
     </div>

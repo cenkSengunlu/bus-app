@@ -9,7 +9,7 @@ const initialState: TicketSliceType = {
   buyTicketStatus: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
   buyTicketError: null,
   // ---------- Get Ticket Info ----------
-  ticketInfo: [],
+  ticketInfo: null,
   ticketInfoStatus: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
   ticketInfoError: null,
 };
@@ -79,6 +79,8 @@ const ticketSlice = createSlice({
       });
   },
 });
+
+export const selectTicketInfo = (state: RootState) => state.ticket.ticketInfo;
 
 export const { logoutUser } = ticketSlice.actions;
 

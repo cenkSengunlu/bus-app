@@ -34,7 +34,6 @@ const defineVoyage = ({
   voyage: VoyagesType;
   error: string;
 }) => {
-  console.log(voyage);
   return (
     <DefineVoyageForm
       buses={voyage.bus}

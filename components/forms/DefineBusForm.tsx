@@ -12,6 +12,8 @@ import {
   selectBusModels,
 } from "../../slices/bus/busSlice";
 import MultipleSelectMenu from "../selectMenus/MultipleSelectMenu";
+import { setActiveTab } from "../../slices/main/mainSlice";
+import SubmitButton from "../SubmitButton";
 
 const DefineBusForm = ({
   brands,
@@ -32,14 +34,16 @@ const DefineBusForm = ({
   const modelsState = useAppSelector(selectBusModels);
 
   useEffect(() => {
-    console.log(brand);
     dispatch(getBusModel({ modelId: brand }));
-    setType("");
+    setModel("");
   }, [brand]);
+
+  useEffect(() => {
+    dispatch(setActiveTab("defineBus"));
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({ plate, brand, model, seatNumber, type, features });
     dispatch(
       createBus({
         plate_number: plate,
@@ -63,6 +67,7 @@ const DefineBusForm = ({
     type.trim(),
     features.length !== 0,
   ].every(Boolean);
+
   return (
     <div className="w-screen h-screen flex items-center justify-center">
       <div className="min-h-[70vh] w-[60%] mx-auto rounded-lg shadow-xl border-2 grid grid-cols-2">
@@ -113,13 +118,7 @@ const DefineBusForm = ({
               />
             </div>
             <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={!canSave}
-                className="mt-5 border-2 text-lg border-black py-2 px-4 cursor-pointer transition ease-in-out hover:bg-black hover:text-white duration-500 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Kaydet
-              </button>
+              <SubmitButton canSave={canSave} />
             </div>
           </FormControl>
         </div>
